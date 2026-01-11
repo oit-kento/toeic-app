@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC Terrarium</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="page-home" class="page active">
+    <div class="header"><h1>My Terrarium</h1></div>
+    <div id="terrarium-container" class="theme-default"></div>
+    
+    <div class="container">
+        <div class="stats-box">
+            <h2>Player Status</h2>
+            <div style="display:flex; justify-content:space-around; align-items:center;">
+                <p>Lv. <span id="home-level" style="font-size:24px; color:#e67e22;">1</span></p>
+                <p>XP: <span id="home-xp" style="font-size:24px; color:#3498db;">0</span></p>
+            </div>
+        </div>
+
+        <div class="home-menu-grid">
+            <div class="menu-card" onclick="showPage('zukan')">
+                <span class="menu-icon">📖</span>
+                <div>
+                    <h4>図鑑</h4>
+                    <span style="font-size:10px; color:#aaa;">Collection</span>
+                </div>
+            </div>
+            <div class="menu-card" onclick="showPage('shop')">
+                <span class="menu-icon">🛒</span>
+                <div>
+                    <h4>ショップ</h4>
+                    <span style="font-size:10px; color:#aaa;">Customize</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="page-quest" class="page">
+    <div class="header"><h1>Quest Mode</h1></div>
+    <div class="container">
+        <div id="quest-menu">
+            <p style="text-align:center; color:#666; font-size:12px; margin-bottom:20px;">
+                さあ、スコアアップの時間です！
+            </p>
+            <div class="playlist-selector">
+                <label>📂 プレイリスト:</label>
+                <select id="quest-playlist-select"><option value="all">全ての問題 (All)</option></select>
+            </div>
+            <div class="quest-card word-card" onclick="startQuest('word')">
+                <div class="icon">📖</div>
+                <div class="info"><h3>単語クエスト</h3><p>4択クイズ</p></div>
+            </div>
+            <div class="quest-card part5-card" onclick="startQuest('part5')">
+                <div class="icon">📝</div>
+                <div class="info"><h3>Part 5 実践</h3><p>穴埋め問題</p></div>
+            </div>
+        </div>
+
+        <div id="quest-play-area" style="display:none;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <button class="small-btn" onclick="exitQuest()">↩ メニューへ</button>
+                <span id="deck-status" style="font-size:12px; line-height:30px;">残り: -</span>
+            </div>
+            <div class="quiz-area">
+                <div id="question-display" class="question-text">Loading...</div>
+                <div id="options-container" class="options"></div>
+                <div id="result-msg"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="page-zukan" class="page">
+    <div class="header">
+        <button class="header-back-btn" onclick="showPage('home')">↩</button>
+        <h1>Encyclopedia</h1>
+        <div style="width:30px;"></div></div>
+    <div class="container">
+        <div id="zukan-container" class="zukan-grid"></div>
+    </div>
+</div>
+
+<div id="page-shop" class="page">
+    <div class="header">
+        <button class="header-back-btn" onclick="showPage('home')">↩</button>
+        <h1>Shop</h1>
+        <span style="font-size:12px;">XP: <span id="shop-xp">0</span></span>
+    </div>
+    <div class="container">
+        <p style="text-align:center; font-size:12px; color:#666;">テラリウムをカスタマイズ</p>
+        <div id="shop-container" class="shop-grid"></div>
+    </div>
+</div>
+
+<div id="page-manage" class="page">
+    <div class="header"><h1>Settings</h1></div>
+    <div class="container">
+        <div class="input-area" style="border-left: 5px solid #9b59b6;">
+            <h3>📁 グループ作成</h3>
+            <div class="input-group"><input type="text" id="new-group-name" placeholder="グループ名"></div>
+            <button class="action-btn" style="background-color:#9b59b6;" onclick="createNewGroup()">作成</button>
+        </div>
+
+        <div class="manage-tabs">
+            <label><input type="radio" name="addType" value="word" checked onclick="switchAddMode()"> 単語</label>
+            <label><input type="radio" name="addType" value="part5" onclick="switchAddMode()"> Part5</label>
+        </div>
+
+        <div class="input-area">
+            <div class="input-group">
+                <label>追加先</label>
+                <select id="add-target-group"><option value="Default">Default</option></select>
+            </div>
+            <hr style="border:0; border-top:1px dashed #ddd; margin-bottom:15px;">
+            <div id="form-word">
+                <div class="input-group"><label>英単語</label><input type="text" id="input-english"></div>
+                <div class="input-group"><label>意味</label><input type="text" id="input-japanese"></div>
+            </div>
+            <div id="form-part5" style="display:none;">
+                <div class="input-group"><label>問題文</label><textarea id="input-p5-question" rows="3"></textarea></div>
+                <div class="input-group"><label>正解</label><input type="text" id="input-p5-answer"></div>
+                <div class="input-group"><label>ダミー</label><input type="text" id="input-p5-wrong"></div>
+            </div>
+            <button class="action-btn save-word-btn" onclick="addNewData()">追加</button>
+            <div id="add-msg" style="text-align:center; color:#27ae60; height:20px;"></div>
+        </div>
+        
+        <hr style="margin: 30px 0; border:0; border-top:1px solid #ddd;">
+        <button class="action-btn" style="background-color:#e74c3c;" onclick="resetGame()">データリセット</button>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showPage('home')">
+        <span class="icon">🏠</span><span class="label">ホーム</span>
+    </button>
+    
+    <div class="nav-center-wrapper">
+        <button class="nav-btn-large" onclick="showPage('quest')">
+            <span class="icon">⚔️</span>
+        </button>
+    </div>
+
+    <button class="nav-btn" onclick="showPage('manage')">
+        <span class="icon">⚙️</span><span class="label">管理</span>
+    </button>
+</nav>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
