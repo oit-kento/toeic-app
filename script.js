@@ -1,6 +1,6 @@
 // --- 状態変数 ---
 let allData = []; 
-let groupList = ["Default"];
+let groupList = [];
 let currentDeck = [];
 let currentMode = "word"; 
 let currentLevel = 1;
@@ -340,7 +340,7 @@ function applyTheme(itemId) { const cssMap = { "theme_default": "theme-default",
 function renderGroupOptions() {
     const questSelect = document.getElementById("quest-playlist-select"); const addSelect = document.getElementById("add-target-group"); if(!questSelect || !addSelect) return;
     questSelect.innerHTML = '<option value="all">全ての問題 (All)</option>'; addSelect.innerHTML = '';
-    const dataGroups = [...new Set(allData.map(d => d.group))]; const allGroups = [...new Set(["Default", ...groupList, ...dataGroups])];
+    const dataGroups = [...new Set(allData.map(d => d.group))]; const allGroups = [...new Set([...groupList, ...dataGroups])];
     const unlockMap = { "book_verbs": "Shop_Verbs", "book_part5_drill": "Shop_Part5_Drill" }; const unlockedGroups = Object.keys(unlockMap).filter(id => myInventory.includes(id)).map(id => unlockMap[id]);
     allGroups.forEach(group => {
         if (group.startsWith("Shop_") && !unlockedGroups.includes(group)) return;
@@ -358,7 +358,7 @@ function updateEditorSelect() { const select = document.getElementById("edit-gro
 function renderEditorList() { const group = document.getElementById("edit-group-select").value; const list = document.getElementById("editor-list"); list.innerHTML = ""; if (!group) return; const userItems = JSON.parse(localStorage.getItem("toeicUserItems") || "[]"); const filteredItems = userItems.filter(i => i.group === group); if (filteredItems.length === 0) { list.innerHTML = "<div style='padding:10px; color:#aaa; text-align:center;'>データがありません</div>"; return; } filteredItems.forEach((item) => { const div = document.createElement("div"); div.className = "editor-item"; div.innerHTML = `<div class="editor-text"><span style="color:#3498db;">[${item.type}]</span> <b>${item.text}</b></div><button class="del-btn" onclick="deleteSingleItem('${item.text}', '${group}')">🗑️</button>`; list.appendChild(div); }); }
 function deleteSingleItem(textToDelete, groupName) { if (!confirm(`削除しますか？`)) return; let userItems = JSON.parse(localStorage.getItem("toeicUserItems") || "[]"); const targetIndex = userItems.findIndex(i => i.text === textToDelete && i.group === groupName); if (targetIndex !== -1) { userItems.splice(targetIndex, 1); localStorage.setItem("toeicUserItems", JSON.stringify(userItems)); alert("削除しました。"); updateDataList(); renderEditorList(); renderGroupOptions(); } }
 function deleteEntireGroup() { const group = document.getElementById("edit-group-select").value; if (!group) return alert("選択してください"); if (!confirm(`グループ「${group}」を削除しますか？`)) return; let userItems = JSON.parse(localStorage.getItem("toeicUserItems") || "[]"); const newItems = userItems.filter(i => i.group !== group); localStorage.setItem("toeicUserItems", JSON.stringify(newItems)); let savedGroups = JSON.parse(localStorage.getItem("toeicGroups") || "[]"); const newGroups = savedGroups.filter(g => g !== group); localStorage.setItem("toeicGroups", JSON.stringify(newGroups)); alert("削除しました"); updateDataList(); renderGroupOptions(); document.getElementById("edit-group-select").value = ""; updateEditorSelect(); renderEditorList(); }
-function updateDataList() { const userItems = JSON.parse(localStorage.getItem("toeicUserItems") || "[]"); const savedGroups = JSON.parse(localStorage.getItem("toeicGroups")); if(savedGroups) groupList = savedGroups; else groupList = ["Default"]; mySpirits = JSON.parse(localStorage.getItem("toeicSpirits") || "[]"); if(typeof defaultData !== 'undefined') { allData = [...defaultData, ...userItems]; } else { allData = [...userItems]; } }
+function updateDataList() { const userItems = JSON.parse(localStorage.getItem("toeicUserItems") || "[]"); const savedGroups = JSON.parse(localStorage.getItem("toeicGroups")); if(savedGroups) groupList = savedGroups; else groupList = []; mySpirits = JSON.parse(localStorage.getItem("toeicSpirits") || "[]"); if(typeof defaultData !== 'undefined') { allData = [...defaultData, ...userItems]; } else { allData = [...userItems]; } }
 function enableButtons(isEnabled) { const buttons = document.querySelectorAll(".option-btn"); buttons.forEach(btn => btn.disabled = !isEnabled); }
 function gainXP(amount) { currentXP += amount; if (currentXP >= currentLevel * 100) currentLevel++; saveGameStats(); updateStatsUI(); }
 function updateStatsUI() { document.getElementById("home-level").innerText = currentLevel; document.getElementById("home-xp").innerText = currentXP; if(currentDeck) document.getElementById("deck-status").innerText = `残り: ${currentDeck.length}`; }
