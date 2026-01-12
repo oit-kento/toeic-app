@@ -10,7 +10,9 @@
 
 <div id="page-home" class="page active">
     <div class="header"><h1>My Terrarium</h1></div>
-    <div id="terrarium-container" class="theme-default"></div>
+    <div id="terrarium-container" class="theme-default">
+        <div class="bg-decor"></div>
+    </div>
     
     <div class="container">
         <div class="stats-box">
@@ -22,19 +24,17 @@
         </div>
 
         <div class="home-menu-grid">
+            <div class="menu-card" onclick="showPage('wordbook')">
+                <span class="menu-icon">📒</span>
+                <div><h4>単語帳</h4><span style="font-size:10px; color:#aaa;">Word List</span></div>
+            </div>
             <div class="menu-card" onclick="showPage('zukan')">
                 <span class="menu-icon">📖</span>
-                <div>
-                    <h4>図鑑</h4>
-                    <span style="font-size:10px; color:#aaa;">Collection</span>
-                </div>
+                <div><h4>図鑑</h4><span style="font-size:10px; color:#aaa;">Collection</span></div>
             </div>
             <div class="menu-card" onclick="showPage('shop')">
                 <span class="menu-icon">🛒</span>
-                <div>
-                    <h4>ショップ</h4>
-                    <span style="font-size:10px; color:#aaa;">Customize</span>
-                </div>
+                <div><h4>ショップ</h4><span style="font-size:10px; color:#aaa;">Customize</span></div>
             </div>
         </div>
     </div>
@@ -44,13 +44,24 @@
     <div class="header"><h1>Quest Mode</h1></div>
     <div class="container">
         <div id="quest-menu">
-            <p style="text-align:center; color:#666; font-size:12px; margin-bottom:20px;">
-                さあ、スコアアップの時間です！
-            </p>
+            <p style="text-align:center; color:#666; font-size:12px; margin-bottom:10px;">コースと問題数を選択</p>
+            
             <div class="playlist-selector">
                 <label>📂 プレイリスト:</label>
                 <select id="quest-playlist-select"><option value="all">全ての問題 (All)</option></select>
             </div>
+
+            <div class="quest-length-selector">
+                <label>問題数:</label>
+                <div class="length-buttons">
+                    <button class="len-btn active" onclick="setQuestLength(5, this)">5</button>
+                    <button class="len-btn" onclick="setQuestLength(10, this)">10</button>
+                    <button class="len-btn" onclick="setQuestLength(20, this)">20</button>
+                    <button class="len-btn" onclick="setQuestLength(50, this)">50</button>
+                    <button class="len-btn" onclick="setQuestLength(999, this)">∞</button>
+                </div>
+            </div>
+
             <div class="quest-card word-card" onclick="startQuest('word')">
                 <div class="icon">📖</div>
                 <div class="info"><h3>単語クエスト</h3><p>4択クイズ</p></div>
@@ -59,19 +70,56 @@
                 <div class="icon">📝</div>
                 <div class="info"><h3>Part 5 実践</h3><p>穴埋め問題</p></div>
             </div>
+
+            <div id="quest-weak-btn" class="quest-card special-card weak-card" style="display:none;" onclick="startQuest('weak')">
+                <div class="icon">🔥</div>
+                <div class="info">
+                    <h3>苦手克服</h3>
+                    <p>間違えた問題: <span id="weak-count">0</span>問</p>
+                </div>
+            </div>
+            <div id="quest-bookmark-btn" class="quest-card special-card bookmark-card" style="display:none;" onclick="startQuest('bookmark')">
+                <div class="icon">⭐️</div>
+                <div class="info">
+                    <h3>ブックマーク</h3>
+                    <p>保存した問題: <span id="bookmark-count">0</span>問</p>
+                </div>
+            </div>
         </div>
 
         <div id="quest-play-area" style="display:none;">
             <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <button class="small-btn" onclick="exitQuest()">↩ メニューへ</button>
+                <button class="small-btn" onclick="exitQuest()">↩ 中断</button>
                 <span id="deck-status" style="font-size:12px; line-height:30px;">残り: -</span>
             </div>
+            
             <div class="quiz-area">
+                <button id="bookmark-toggle-btn" class="bookmark-btn" onclick="toggleBookmark()">☆</button>
+                
                 <div id="question-display" class="question-text">Loading...</div>
                 <div id="options-container" class="options"></div>
                 <div id="result-msg"></div>
+                <div id="explanation-area" style="display:none;"></div>
+                <button id="next-btn" class="action-btn" style="display:none; margin-top:15px; background:#34495e;" onclick="nextQuestion()">Next Question ➡</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="page-wordbook" class="page">
+    <div class="header">
+        <button class="header-back-btn" onclick="showPage('home')">↩</button>
+        <h1>Wordbook</h1>
+        <div style="width:30px;"></div>
+    </div>
+    <div class="container">
+        <div class="playlist-selector">
+            <label>絞り込み:</label>
+            <select id="wordbook-filter" onchange="renderWordbook()">
+                <option value="all">全て (All)</option>
+            </select>
+        </div>
+        <div id="wordbook-list"></div>
     </div>
 </div>
 
@@ -79,7 +127,8 @@
     <div class="header">
         <button class="header-back-btn" onclick="showPage('home')">↩</button>
         <h1>Encyclopedia</h1>
-        <div style="width:30px;"></div></div>
+        <div style="width:30px;"></div>
+    </div>
     <div class="container">
         <div id="zukan-container" class="zukan-grid"></div>
     </div>
@@ -105,12 +154,10 @@
             <div class="input-group"><input type="text" id="new-group-name" placeholder="グループ名"></div>
             <button class="action-btn" style="background-color:#9b59b6;" onclick="createNewGroup()">作成</button>
         </div>
-
         <div class="manage-tabs">
             <label><input type="radio" name="addType" value="word" checked onclick="switchAddMode()"> 単語</label>
             <label><input type="radio" name="addType" value="part5" onclick="switchAddMode()"> Part5</label>
         </div>
-
         <div class="input-area">
             <div class="input-group">
                 <label>追加先</label>
@@ -124,31 +171,47 @@
             <div id="form-part5" style="display:none;">
                 <div class="input-group"><label>問題文</label><textarea id="input-p5-question" rows="3"></textarea></div>
                 <div class="input-group"><label>正解</label><input type="text" id="input-p5-answer"></div>
-                <div class="input-group"><label>ダミー</label><input type="text" id="input-p5-wrong"></div>
+                <div class="input-group"><label>ダミー(カンマ区切り)</label><input type="text" id="input-p5-wrong"></div>
+                <div class="input-group"><label>解説(任意)</label><input type="text" id="input-p5-explanation" placeholder="〜だから〜になる"></div>
             </div>
             <button class="action-btn save-word-btn" onclick="addNewData()">追加</button>
             <div id="add-msg" style="text-align:center; color:#27ae60; height:20px;"></div>
         </div>
         
+        <div class="input-area" style="border-left: 5px solid #2ecc71;">
+            <h3>📊 CSV一括インポート</h3>
+            <p style="font-size:10px; color:#666; margin-bottom:5px;">形式: <code>type, group, text, answer, options, translation, explanation</code></p>
+            <textarea id="csv-input" rows="5" placeholder="例: word, 動詞, run, 走る,,,"></textarea>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button class="action-btn" style="background-color:#95a5a6;" onclick="copyTemplate()">雛形をコピー</button>
+                <button class="action-btn" style="background-color:#2ecc71;" onclick="importCSV()">インポート実行</button>
+            </div>
+        </div>
+
+        <div class="input-area" style="border-left: 5px solid #e74c3c;">
+            <h3>💾 保存データの管理</h3>
+            <p style="font-size:10px; color:#666;">ユーザーが追加したデータを編集・削除できます。</p>
+            <div class="input-group">
+                <label>編集するグループを選択</label>
+                <select id="edit-group-select" onchange="renderEditorList()"><option value="">選択してください</option></select>
+            </div>
+            <div id="editor-list" class="editor-list"></div>
+            <div style="margin-top:15px; text-align:right;">
+                <button class="small-btn" style="background:#e74c3c; color:white;" onclick="deleteEntireGroup()">⚠️ このグループを全削除</button>
+            </div>
+        </div>
+        
         <hr style="margin: 30px 0; border:0; border-top:1px solid #ddd;">
-        <button class="action-btn" style="background-color:#e74c3c;" onclick="resetGame()">データリセット</button>
+        <button class="action-btn" style="background-color:#7f8c8d;" onclick="resetGame()">全データをリセット (初期化)</button>
     </div>
 </div>
 
 <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="showPage('home')">
-        <span class="icon">🏠</span><span class="label">ホーム</span>
-    </button>
-    
+    <button class="nav-btn active" onclick="showPage('home')"><span class="icon">🏠</span><span class="label">ホーム</span></button>
     <div class="nav-center-wrapper">
-        <button class="nav-btn-large" onclick="showPage('quest')">
-            <span class="icon">⚔️</span>
-        </button>
+        <button class="nav-btn-large" onclick="showPage('quest')"><span class="icon">⚔️</span></button>
     </div>
-
-    <button class="nav-btn" onclick="showPage('manage')">
-        <span class="icon">⚙️</span><span class="label">管理</span>
-    </button>
+    <button class="nav-btn" onclick="showPage('manage')"><span class="icon">⚙️</span><span class="label">管理</span></button>
 </nav>
 
 <script src="data.js"></script>

@@ -1,8 +1,7 @@
 // --- TOEIC 問題データ (Volume 1) ---
-
 const defaultData = [
     // ==========================================
-    // 📂 グループ: Lv.1_頻出動詞 (Verbs)
+    // 📂 グループ: Lv.1_頻出動詞
     // ==========================================
     { type: "word", text: "accept", answer: "受け入れる", group: "Lv.1_頻出動詞" },
     { type: "word", text: "achieve", answer: "達成する", group: "Lv.1_頻出動詞" },
@@ -56,7 +55,7 @@ const defaultData = [
     { type: "word", text: "confirm", answer: "確認する", group: "Lv.1_頻出動詞" },
 
     // ==========================================
-    // 📂 グループ: Lv.1_ビジネス名詞 (Nouns)
+    // 📂 グループ: Lv.1_ビジネス名詞
     // ==========================================
     { type: "word", text: "access", answer: "アクセス/接近", group: "Lv.1_ビジネス名詞" },
     { type: "word", text: "account", answer: "口座/説明", group: "Lv.1_ビジネス名詞" },
@@ -110,7 +109,7 @@ const defaultData = [
     { type: "word", text: "construction", answer: "建設", group: "Lv.1_ビジネス名詞" },
 
     // ==========================================
-    // 📂 グループ: Lv.2_重要形容詞 (Adj)
+    // 📂 グループ: Lv.2_重要形容詞
     // ==========================================
     { type: "word", text: "able", answer: "可能な", group: "Lv.2_重要形容詞" },
     { type: "word", text: "acceptable", answer: "受け入れられる", group: "Lv.2_重要形容詞" },
@@ -172,149 +171,144 @@ const defaultData = [
         text: "Ms. Lee is _____ in applying for the manager position.", 
         answer: "interested", 
         options: ["interest", "interested", "interesting", "interests"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "be interested in 〜で「〜に興味がある」という熟語。"
     },
     { 
         type: "part5", 
         text: "Please read the instructions _____ before using the machine.", 
         answer: "carefully", 
         options: ["careful", "carefully", "care", "caring"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "動詞 read を修飾するのは副詞の carefully。"
     },
     { 
         type: "part5", 
         text: "The new model is _____ faster than the old one.", 
         answer: "significantly", 
         options: ["significant", "significance", "significantly", "signify"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "比較級 faster を強調する副詞 significantly が正解。"
     },
     { 
         type: "part5", 
         text: "We look forward to _____ from you soon.", 
         answer: "hearing", 
         options: ["hear", "heard", "hearing", "hears"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "look forward to の to は前置詞なので、後ろは動名詞(ing)が来る。"
     },
     { 
         type: "part5", 
         text: "Despite the rain, the event was _____ well.", 
         answer: "attended", 
         options: ["attend", "attends", "attending", "attended"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "受動態（be動詞 + 過去分詞）。was attended で「出席者がいた」。"
     },
     { 
         type: "part5", 
         text: "The package should arrive _____ Friday.", 
         answer: "by", 
         options: ["until", "by", "on", "at"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "「金曜日までに」という期限を表すので by。"
     },
     { 
         type: "part5", 
         text: "Employees must _____ their badges at all times.", 
         answer: "wear", 
         options: ["wears", "wearing", "wear", "wore"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "助動詞 must の後ろは動詞の原形。"
     },
     { 
         type: "part5", 
         text: "Mr. Tanaka has been working here _____ 10 years.", 
         answer: "for", 
         options: ["since", "during", "for", "while"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "期間（10 years）を表すので for。"
     },
     { 
         type: "part5", 
         text: "The sales report was _____ by the marketing team.", 
         answer: "prepared", 
         options: ["prepare", "prepares", "preparing", "prepared"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "受動態「準備された」なので過去分詞 prepared。"
     },
     { 
         type: "part5", 
         text: "Please contact us if you need any _____ information.", 
         answer: "further", 
         options: ["far", "further", "farthest", "more far"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "「さらなる」という意味の形容詞 further。"
     },
     { 
         type: "part5", 
         text: "The hotel offers _____ internet access to all guests.", 
         answer: "complimentary", 
         options: ["compliment", "compliments", "complimentary", "complimented"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        translation: "そのホテルは全ての客に無料のインターネット接続を提供している。",
+        explanation: "complimentary = 無料の。"
     },
     { 
         type: "part5", 
         text: "He is capable _____ handling difficult customers.", 
         answer: "of", 
         options: ["at", "on", "of", "with"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "be capable of 〜 で「〜する能力がある」。"
     },
     { 
         type: "part5", 
         text: "The deadline for the project is approaching _____.", 
         answer: "rapidly", 
         options: ["rapid", "rapidness", "rapidly", "rapidity"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "動詞 approaching を修飾する副詞 rapidly。"
     },
     { 
         type: "part5", 
         text: "We need to _____ a decision by tomorrow.", 
         answer: "make", 
         options: ["do", "make", "have", "take"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "make a decision で「決定する」。"
     },
     { 
         type: "part5", 
         text: "All visitors are required to _____ at the front desk.", 
         answer: "register", 
         options: ["registers", "registered", "registering", "register"], 
-        group: "Part5_Grammar" 
-    },
-    { 
-        type: "part5", 
-        text: "The cost of living has risen _____ in recent years.", 
-        answer: "dramatically", 
-        options: ["dramatic", "dramatically", "dramatics", "drama"], 
-        group: "Part5_Grammar" 
-    },
-    { 
-        type: "part5", 
-        text: "Mr. Kim is responsible _____ managing the budget.", 
-        answer: "for", 
-        options: ["to", "of", "with", "for"], 
-        group: "Part5_Grammar" 
-    },
-    { 
-        type: "part5", 
-        text: "If you have any questions, please _____ free to ask.", 
-        answer: "feel", 
-        options: ["fall", "fell", "feel", "felt"], 
-        group: "Part5_Grammar" 
-    },
-    { 
-        type: "part5", 
-        text: "The new software is _____ easier to use than the old one.", 
-        answer: "much", 
-        options: ["very", "so", "much", "too"], 
-        group: "Part5_Grammar" 
-    },
-    { 
-        type: "part5", 
-        text: "We specialize _____ custom-made furniture.", 
-        answer: "in", 
-        options: ["on", "at", "in", "to"], 
-        group: "Part5_Grammar" 
+        group: "Part5_Grammar",
+        explanation: "to不定詞なので動詞の原形。"
     },
     
-    // === ショップ限定データ (再掲) ===
+    // === ショップ限定データ (購入後解放) ===
     { type: "word", text: "participate", answer: "参加する", group: "Shop_Verbs" },
     { type: "word", text: "reject", answer: "拒否する", group: "Shop_Verbs" },
     { type: "word", text: "approve", answer: "承認する", group: "Shop_Verbs" },
     { type: "word", text: "establish", answer: "設立する", group: "Shop_Verbs" },
     { type: "word", text: "indicate", answer: "指し示す", group: "Shop_Verbs" },
 
-    { type: "part5", text: "The seminar was _____ than I expected.", answer: "more interesting", options: ["interest", "interested", "interesting", "more interesting"], group: "Shop_Part5_Drill" },
-    { type: "part5", text: "All employees must _____ the safety regulations.", answer: "follow", options: ["follows", "following", "followed", "follow"], group: "Shop_Part5_Drill" },
+    { 
+        type: "part5", 
+        text: "The seminar was _____ than I expected.", 
+        answer: "more interesting", 
+        options: ["interest", "interested", "interesting", "more interesting"], 
+        group: "Shop_Part5_Drill",
+        explanation: "thanがあるので比較級。"
+    },
+    { 
+        type: "part5", 
+        text: "All employees must _____ the safety regulations.", 
+        answer: "follow", 
+        options: ["follows", "following", "followed", "follow"], 
+        group: "Shop_Part5_Drill",
+        explanation: "助動詞 must の後は原形。"
+    },
 ];
