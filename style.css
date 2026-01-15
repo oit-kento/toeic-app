@@ -4,7 +4,7 @@ body {
     background-color: #f0f4f8;
     margin: 0;
     color: #333;
-    padding-bottom: 80px; /* ナビゲーションの分空ける */
+    padding-bottom: 80px;
     overflow-x: hidden;
 }
 
@@ -29,13 +29,19 @@ body {
 .header h1 { margin: 0; font-size: 18px; flex-grow: 1; text-align: center; }
 .header-back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; }
 
-/* コンテンツエリア (★スマホ操作用に前面に配置) */
+/* コンテンツエリア */
 .container {
     padding: 20px;
     max-width: 500px;
     margin: 0 auto;
     position: relative;
-    z-index: 5; /* 背景装飾より手前にする */
+    z-index: 5;
+}
+
+/* === テラリウム・ラッパー (★追加) === */
+.terrarium-wrapper {
+    position: relative; /* 子要素(ボタン)の基準点 */
+    width: 100%;
 }
 
 /* === ホーム画面メニュー === */
@@ -59,11 +65,10 @@ body {
 .menu-card .menu-icon { font-size: 24px; margin-right: 10px; }
 .menu-card h4 { margin: 0; font-size: 16px; color: #2c3e50; }
 
-/* === テラリウム（リッチ版） === */
+/* === テラリウム（画像背景版） === */
 #terrarium-container {
     width: 100%;
     height: 300px;
-    background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
     position: relative;
     overflow-x: auto;
     overflow-y: hidden;
@@ -74,34 +79,68 @@ body {
     box-sizing: border-box;
     scrollbar-width: thin;
     scrollbar-color: #85b8cb transparent;
-    transition: background 0.5s;
+    
+    background-color: #333;
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease;
 }
-/* 地面 */
+
 #terrarium-container::after {
     content: "";
     position: absolute;
     bottom: 0; left: 0;
-    width: 100%; min-width: 100%; height: 30px;
-    background-color: #87ceeb;
-    opacity: 0.5;
+    width: 100%; min-width: 100%; height: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
     pointer-events: none;
     z-index: 0;
 }
 
-/* 背景装飾アニメーション */
-.bg-decor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.bg-decor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.4; }
+.bg-particles {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: floatParticles 20s linear infinite;
+    opacity: 0.5;
+}
+@keyframes floatParticles { from { background-position: 0 0; } to { background-position: 0 -100px; } }
 
-/* テーマ設定 */
-.theme-default { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); } .theme-default::after { background-color: #90ee90; }
-.theme-default .bg-decor::before, .theme-default .bg-decor::after { content: "☁️"; position: absolute; font-size: 40px; opacity: 0.6; animation: moveCloud 30s linear infinite; }
-.theme-default .bg-decor::before { top: 30px; left: -50px; } .theme-default .bg-decor::after { top: 80px; left: -100px; animation-delay: 15s; font-size: 30px; }
+/* ★ホーム用デイリークエストボタン (浮遊) */
+.daily-floating-btn {
+    position: absolute;
+    top: 15px; /* ラッパーの上端から */
+    right: 15px; /* ラッパーの右端から */
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #f1c40f;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    z-index: 20; /* 最前面 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: transform 0.2s, opacity 0.2s;
+    animation: floatBtn 3s ease-in-out infinite;
+    /* ★追加: タップしやすくする */
+    touch-action: manipulation;
+}
+.daily-floating-btn:active { transform: scale(0.95); }
+.daily-floating-btn .icon { font-size: 24px; }
+.daily-floating-btn .text { font-size: 12px; font-weight: bold; color: #d35400; line-height: 1.2; text-align: left; }
 
-.theme-sunset { background: linear-gradient(to bottom, #fd746c, #ff9068); } .theme-sunset::after { background-color: #deb887; }
-.theme-forest { background: linear-gradient(to bottom, #56ab2f, #a8e063); } .theme-forest::after { background-color: #228b22; }
-.theme-night { background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); } .theme-night::after { background-color: #2f4f4f; }
-.theme-space { background: linear-gradient(to bottom, #000000, #434343); position: relative; } .theme-space::after { background-color: #4b0082; }
-
-@keyframes moveCloud { from { transform: translateX(0); } to { transform: translateX(500px); } }
+.daily-floating-btn.completed {
+    background: rgba(230, 230, 230, 0.9);
+    border-color: #bdc3c7;
+    filter: grayscale(100%);
+    animation: none;
+    opacity: 0.8;
+    pointer-events: none;
+}
+@keyframes floatBtn { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
 /* ステータス */
 .stats-box { background: white; margin: 20px 0; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -111,16 +150,29 @@ body {
 .spirit { position: relative; display: inline-block; text-align: center; font-size: 40px; margin: 0 15px; cursor: pointer; user-select: none; transition: transform 0.2s; z-index: 10; animation: bounce 2s infinite ease-in-out; }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .spirit:hover { transform: scale(1.2) translateY(-15px); z-index: 20; }
-.effect-shine { filter: drop-shadow(0 0 5px yellow); } .effect-rock { filter: grayscale(0.5) contrast(1.2); } .effect-moon { filter: drop-shadow(0 0 3px purple); opacity: 0.9; }
+.effect-shine { filter: drop-shadow(0 0 5px yellow); } 
+.effect-rock { filter: grayscale(0.5) contrast(1.2); } 
+.effect-moon { filter: drop-shadow(0 0 3px purple); opacity: 0.9; }
 
-/* 図鑑・ショップ・単語帳リスト */
+/* ガイド */
+.guide-box { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.guide-box h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+.guide-box p { line-height: 1.6; color: #555; }
+.guide-box .highlight { color: #e74c3c; font-weight: bold; background: #fdedec; padding: 5px 10px; border-radius: 5px; display: inline-block; }
+.guide-box ul { padding-left: 20px; color: #555; }
+
+/* 単語帳・図鑑・ショップ */
+.wb-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; background: white; padding: 10px; border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.wb-tabs label { font-size: 14px; font-weight: bold; color: #7f8c8d; cursor: pointer; }
+.wb-tabs input[type="radio"] { margin-right: 5px; }
+
 .zukan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
 .zukan-item { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .zukan-item.locked { background: #f0f0f0; color: #aaa; } .zukan-item.locked .zukan-icon { filter: grayscale(100%) blur(2px) opacity(0.5); }
 
 .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
 .shop-item { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 2px solid transparent; }
-.shop-preview { width: 100%; height: 60px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #ddd; }
+.shop-preview { width: 100%; height: 60px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #ddd; background-size: cover; background-position: center; }
 .buy-btn { margin-top: 10px; background: #3498db; color: white; border: none; padding: 5px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; width: 100%; }
 .buy-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
 .shop-item.equipped { border-color: #27ae60; background-color: #f0fff4; } .equip-btn { background: #27ae60; }
@@ -128,36 +180,19 @@ body {
 .word-item { background: white; padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
 .word-item:first-child { border-top-left-radius: 10px; border-top-right-radius: 10px; }
 .word-item:last-child { border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-bottom: none; }
-.word-left { font-weight: bold; color: #2c3e50; width: 50%; word-wrap: break-word;     /* 長すぎる単語だけ改行 */
-    overflow-wrap: break-word; /* 最新ブラウザ用 */
-    
-    padding-right: 10px; /* 右側に少し隙間を空ける */}
+.word-left { font-weight: bold; color: #2c3e50; width: 50%; word-wrap: break-word; overflow-wrap: break-word; padding-right: 10px; }
 .word-right { color: #7f8c8d; width: 50%; text-align: right; font-size: 14px; }
 .word-item.is-part5 { flex-direction: column; align-items: flex-start; }
 .word-item.is-part5 .word-left { width: 100%; margin-bottom: 5px; font-weight: normal; font-size: 14px; }
 .word-item.is-part5 .word-right { width: 100%; text-align: left; color: #e67e22; font-weight: bold; }
 .word-tag { font-size: 10px; background: #ecf0f1; color: #95a5a6; padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
 
-/* === クエスト関連 === */
+/* クエスト関連 */
 .playlist-selector { background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
-/* 問題数選択ボタン (★スマホ対応: タップしやすく修正) */
 .quest-length-selector { background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 .quest-length-selector label { font-weight: bold; font-size: 14px; color: #34495e; display: block; margin-bottom: 8px; }
 .length-buttons { display: flex; justify-content: space-between; }
-.len-btn {
-    border: 1px solid #bdc3c7;
-    background: #f9f9f9;
-    color: #7f8c8d;
-    border-radius: 5px;
-    width: 18%;
-    padding: 15px 0; /* 高さを増やしてタップしやすく */
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    touch-action: manipulation; /* スマホのタップ遅延防止 */
-    transition: background 0.2s, color 0.2s;
-}
+.len-btn { border: 1px solid #bdc3c7; background: #f9f9f9; color: #7f8c8d; border-radius: 5px; width: 18%; padding: 15px 0; cursor: pointer; font-size: 14px; font-weight: bold; touch-action: manipulation; transition: background 0.2s, color 0.2s; }
 .len-btn.active { background: #3498db; color: white; border-color: #3498db; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4); }
 
 .quest-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s; }
@@ -167,25 +202,18 @@ body {
 .quest-card .icon { font-size: 30px; margin-right: 15px; background: #ecf0f1; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
 .quest-card h3 { margin: 0; font-size: 16px; } .quest-card p { margin: 0; font-size: 12px; color: #888; }
 
+/* ★クエスト画面用デイリーカード */
+.daily-card { border-left-color: #f39c12; background: linear-gradient(to right, #fff, #fff9e6); position: relative; }
+.daily-card .icon { background: #fce8b2; }
+.daily-badge { position: absolute; right: 15px; background: #e74c3c; color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
+.daily-card.completed { filter: grayscale(100%); opacity: 0.7; cursor: default; pointer-events: none; }
+.daily-card.completed .daily-badge { background: #95a5a6; }
+
 .special-card { border-left-width: 5px; margin-top: 10px; background-color: #fff; }
 .weak-card { border-left-color: #e74c3c; background-color: #fdf2f2; } .weak-card .icon { background: #fadbd8; }
 .bookmark-card { border-left-color: #f1c40f; background-color: #fef9e7; } .bookmark-card .icon { background: #f9e79f; }
 
-/* クイズ画面 */
-.question-text {
-    background: white;
-    padding: 20px;
-    padding-right: 50px; /* ★修正: ブックマークボタンと被らないように余白確保 */
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    font-weight: bold;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
+.question-text { background: white; padding: 20px; padding-right: 50px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center; position: relative; }
 .type-word { font-size: 28px; text-align: center; }
 .type-part5 { font-size: 16px; text-align: left; line-height: 1.6; border-left: 5px solid #e67e22; }
 .speaker-btn { background-color: #f1c40f; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; box-shadow: 0 4px 0 #d35400; margin-left: 15px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
@@ -198,20 +226,9 @@ body {
 #result-msg { text-align: center; margin-top: 20px; font-weight: bold; height: 20px; }
 .correct { color: #27ae60; } .wrong { color: #e74c3c; }
 
-/* クイズ中のブックマークボタン (★修正: 位置を枠内に) */
+/* クイズ中のブックマークボタン */
 .quiz-area { position: relative; }
-.bookmark-btn {
-    position: absolute;
-    top: 5px; /* 枠の内側 */
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 30px;
-    color: #bdc3c7;
-    cursor: pointer;
-    z-index: 20;
-    transition: transform 0.2s, color 0.2s;
-}
+.bookmark-btn { position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 30px; color: #bdc3c7; cursor: pointer; z-index: 20; transition: transform 0.2s, color 0.2s; }
 .bookmark-btn.active { color: #f1c40f; transform: scale(1.2); }
 .bookmark-btn:active { transform: scale(0.9); }
 
@@ -229,14 +246,12 @@ body {
 .editor-text { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; }
 .del-btn { background: #e74c3c; color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer; font-weight: bold; flex-shrink: 0; }
 
-/* 下部ナビゲーション (★崩れ防止 box-sizing入り) */
+/* 下部ナビゲーション */
 .bottom-nav {
     position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
     background: white; border-top: 1px solid #eee;
     display: flex; justify-content: space-between; align-items: center;
-    padding: 0 30px; 
-    box-sizing: border-box; /* これが重要 */
-    z-index: 100;
+    padding: 0 30px; box-sizing: border-box; z-index: 100;
 }
 .nav-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; color: #95a5a6; cursor: pointer; width: 60px; }
 .nav-btn .icon { font-size: 24px; margin-bottom: 2px; } .nav-btn .label { font-size: 10px; font-weight: bold; } .nav-btn.active { color: #3498db; }

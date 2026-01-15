@@ -10,8 +10,20 @@
 
 <div id="page-home" class="page active">
     <div class="header"><h1>My Terrarium</h1></div>
-    <div id="terrarium-container" class="theme-default">
-        <div class="bg-decor"></div>
+    
+    <div class="terrarium-wrapper">
+        <div id="terrarium-container" class="theme-default">
+            <div class="bg-decor"></div>
+            <div class="bg-particles"></div>
+        </div>
+        
+        <div id="daily-btn-home" class="daily-floating-btn" onclick="startDailyQuest()">
+            <span class="icon">🎁</span>
+            <div class="text">
+                Daily<br>
+                <span class="daily-status-text" style="font-size:10px; color:#e67e22;">GET 100 XP</span>
+            </div>
+        </div>
     </div>
     
     <div class="container">
@@ -36,6 +48,10 @@
                 <span class="menu-icon">🛒</span>
                 <div><h4>ショップ</h4><span style="font-size:10px; color:#aaa;">Customize</span></div>
             </div>
+            <div class="menu-card" onclick="showPage('guide')">
+                <span class="menu-icon">🔰</span>
+                <div><h4>ガイド</h4><span style="font-size:10px; color:#aaa;">About TOEIC</span></div>
+            </div>
         </div>
     </div>
 </div>
@@ -46,6 +62,15 @@
         <div id="quest-menu">
             <p style="text-align:center; color:#666; font-size:12px; margin-bottom:10px;">コースと問題数を選択</p>
             
+            <div id="daily-btn-quest" class="quest-card daily-card" onclick="startDailyQuest()">
+                <div class="icon">🎁</div>
+                <div class="info">
+                    <h3>デイリークエスト</h3>
+                    <p>1日1回限定！ (報酬: 100 XP)</p>
+                </div>
+                <div class="daily-badge daily-status-text">挑戦可</div>
+            </div>
+
             <div class="playlist-selector">
                 <label>📂 プレイリスト:</label>
                 <select id="quest-playlist-select"><option value="all">全ての問題 (All)</option></select>
@@ -73,17 +98,11 @@
 
             <div id="quest-weak-btn" class="quest-card special-card weak-card" style="display:none;" onclick="startQuest('weak')">
                 <div class="icon">🔥</div>
-                <div class="info">
-                    <h3>苦手克服</h3>
-                    <p>間違えた問題: <span id="weak-count">0</span>問</p>
-                </div>
+                <div class="info"><h3>苦手克服</h3><p>間違えた問題: <span id="weak-count">0</span>問</p></div>
             </div>
             <div id="quest-bookmark-btn" class="quest-card special-card bookmark-card" style="display:none;" onclick="startQuest('bookmark')">
                 <div class="icon">⭐️</div>
-                <div class="info">
-                    <h3>ブックマーク</h3>
-                    <p>保存した問題: <span id="bookmark-count">0</span>問</p>
-                </div>
+                <div class="info"><h3>ブックマーク</h3><p>保存した問題: <span id="bookmark-count">0</span>問</p></div>
             </div>
         </div>
 
@@ -92,10 +111,8 @@
                 <button class="small-btn" onclick="exitQuest()">↩ 中断</button>
                 <span id="deck-status" style="font-size:12px; line-height:30px;">残り: -</span>
             </div>
-            
             <div class="quiz-area">
                 <button id="bookmark-toggle-btn" class="bookmark-btn" onclick="toggleBookmark()">☆</button>
-                
                 <div id="question-display" class="question-text">Loading...</div>
                 <div id="options-container" class="options"></div>
                 <div id="result-msg"></div>
@@ -113,10 +130,15 @@
         <div style="width:30px;"></div>
     </div>
     <div class="container">
-        <div class="playlist-selector">
+        <div class="wb-tabs">
+            <label><input type="radio" name="wb-type" value="all" checked onclick="renderWordbook()"> 全て</label>
+            <label><input type="radio" name="wb-type" value="word" onclick="renderWordbook()"> 単語</label>
+            <label><input type="radio" name="wb-type" value="part5" onclick="renderWordbook()"> Part 5</label>
+        </div>
+        <div class="playlist-selector" style="margin-top:10px;">
             <label>絞り込み:</label>
             <select id="wordbook-filter" onchange="renderWordbook()">
-                <option value="all">全て (All)</option>
+                <option value="all">全てのグループ</option>
             </select>
         </div>
         <div id="wordbook-list"></div>
@@ -143,6 +165,36 @@
     <div class="container">
         <p style="text-align:center; font-size:12px; color:#666;">テラリウムをカスタマイズ</p>
         <div id="shop-container" class="shop-grid"></div>
+    </div>
+</div>
+
+<div id="page-guide" class="page">
+    <div class="header">
+        <button class="header-back-btn" onclick="showPage('home')">↩</button>
+        <h1>TOEIC Guide</h1>
+        <div style="width:30px;"></div>
+    </div>
+    <div class="container">
+        <div class="guide-box">
+            <h3>⏱ 試験の概要</h3>
+            <p>TOEIC L&Rは全200問、約2時間のマークシート方式のテストです。</p>
+            <ul>
+                <li><strong>リスニング (45分)</strong>: 100問</li>
+                <li><strong>リーディング (75分)</strong>: 100問</li>
+            </ul>
+        </div>
+        <div class="guide-box">
+            <h3>📖 Part 5 とは？</h3>
+            <p><strong>「短文穴埋め問題」</strong>です。</p>
+            <p class="highlight">目標: 1問20秒以内！</p>
+            <p>文法や語彙力が問われます。</p>
+        </div>
+        <div class="guide-box">
+            <h3>💡 このアプリの使い方</h3>
+            <p><strong>1. クエストを周回</strong><br>スキマ時間に問題を解きましょう。コトダマ（精霊）が集まります。</p>
+            <p><strong>2. 苦手リストを消化</strong><br>間違えた問題は自動で「苦手リスト」に入ります。</p>
+            <p><strong>3. 放置でXP稼ぎ</strong><br>集めたコトダマ達は、アプリを閉じている間もXPを集めてくれます。</p>
+        </div>
     </div>
 </div>
 
